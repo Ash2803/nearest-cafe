@@ -26,7 +26,6 @@ def fetch_coordinates(apikey, address):
 
 def list_of_cafes():
     for cafes in cafe_data:
-
         cafe_dict = dict()
         cafe_coords = cafes.get('Latitude_WGS84'), cafes.get('Longitude_WGS84')
         distance_to_cafe = distance.distance(your_place_coords, cafe_coords).km
@@ -51,4 +50,6 @@ if __name__ == '__main__':
     your_place_coords = fetch_coordinates(apikey, your_place)
     cafe_list = []
     list_of_cafes()
-    print(min(cafe_list, key=get_nearest_cafe))
+    list_of_sorted_cafes = sorted(cafe_list, key=get_nearest_cafe)[:5]
+    for item in list_of_sorted_cafes:
+        print(item['title'])
