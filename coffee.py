@@ -1,12 +1,15 @@
 import json
 import requests
+from dotenv import load_dotenv
+import os
 from geopy import distance
-
 
 with open("coffee.json", "r", encoding='CP1251') as my_file:
     file_contents = my_file.read()
 
 cafe_data = json.loads(file_contents)
+
+
 # print(cafe)
 
 # for cafe in cafe_data:
@@ -34,9 +37,11 @@ def fetch_coordinates(apikey, address):
     return lon, lat
 
 
-print("Где вы находитесь?")
-user_place = input()
+load_dotenv()
+apikey = os.getenv('YANDEX_GEO_API_KEY')
 
-apikey = '78bd8346-0a41-4d55-b281-59716f2fc48c'  # ваш ключ
-
-print(f'Ваши координаты {fetch_coordinates(apikey, user_place)}')
+first_place = input('Введите Пункт А: ')
+second_place = input('Введите Пункт B: ')
+print(f'Точка А {fetch_coordinates(apikey, first_place)}')
+print(f'Точка B {fetch_coordinates(apikey, second_place)}')
+print(distance.distance(first_place, second_place).km)
