@@ -31,17 +31,19 @@ def fetch_coordinates(apikey, address):
 
 load_dotenv()
 apikey = os.getenv('YANDEX_GEO_API_KEY')
-#your_place = input("Где вы находитесь? ")
-#your_place_coords = fetch_coordinates(apikey, your_place)
+your_place = input("Где вы находитесь? ")
+your_place_coords = fetch_coordinates(apikey, your_place)
+
+for cafes in cafe_data:
+    cafe_dict = dict()
+    cafe_coords = cafes.get('Latitude_WGS84'), cafes.get('Longitude_WGS84')
+    distance_to_cafe = distance.distance(your_place_coords, cafe_coords).km
+    cafe_dict['title'] = cafes.get('Name')
+    cafe_dict['dist'] = distance_to_cafe
+    cafe_dict['latitude'] = cafes.get('Latitude_WGS84')
+    cafe_dict['longitude'] = cafes.get('Longitude_WGS84')
+    cafe_list.append(cafe_dict)
 
 
-for cafe in cafe_data:
-    cafes = dict()
-    cafe_name = cafe.get('Name')
-    latitude = cafe.get('Latitude_WGS84')
-    longitude = cafe.get('Longitude_WGS84')
-    cafes['title'] = cafe_name
-    #cafes['distance'] = distance.distance(cafe_name, your_place_coords).km
-    cafes['latitude'] = latitude
-    cafes['longitude'] = longitude
-    pprint(cafes, sort_dicts=False)
+if __name__ == '__main__':
+    cafe_list = []
