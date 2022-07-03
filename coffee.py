@@ -24,8 +24,9 @@ def fetch_coordinates(apikey, address):
     return lat, lon
 
 
-def list_of_cafes(cafe_list, your_place_coords):
+def list_of_cafes():
     for cafes in cafe_data:
+
         cafe_dict = dict()
         cafe_coords = cafes.get('Latitude_WGS84'), cafes.get('Longitude_WGS84')
         distance_to_cafe = distance.distance(your_place_coords, cafe_coords).km
@@ -34,6 +35,10 @@ def list_of_cafes(cafe_list, your_place_coords):
         cafe_dict['latitude'] = cafes.get('Latitude_WGS84')
         cafe_dict['longitude'] = cafes.get('Longitude_WGS84')
         cafe_list.append(cafe_dict)
+
+
+def get_nearest_cafe(cafe):
+    return cafe['dist']
 
 
 if __name__ == '__main__':
@@ -45,4 +50,5 @@ if __name__ == '__main__':
     your_place = input("Где вы находитесь? ")
     your_place_coords = fetch_coordinates(apikey, your_place)
     cafe_list = []
-    pprint(cafe_list, sort_dicts=False)
+    list_of_cafes()
+    print(min(cafe_list, key=get_nearest_cafe))
