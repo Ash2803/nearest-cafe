@@ -70,6 +70,7 @@ def main():
     your_place_coords = fetch_coordinates(apikey, your_place)
     listed_cafe = make_list_of_cafes(cafe_data, your_place_coords)
     list_of_sorted_cafes = sorted(listed_cafe, key=get_nearest_cafe)[:5]
+    show_cafes_on_map(your_place_coords, list_of_sorted_cafes)
     app = Flask(__name__)
     app.add_url_rule('/', 'hello', hello_world)
     app.run('0.0.0.0')
