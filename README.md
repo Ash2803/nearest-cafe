@@ -10,6 +10,7 @@
 ```
 pip install -r requirements.txt
 ```
+- Создайте файл .env и поместите туда свой API-токен YANDEX_GEO_API_KEY=token
 - Запустите программу:
 ```
 python coffe.py
