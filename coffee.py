@@ -1,9 +1,11 @@
 import json
 import os
 from pprint import pprint
-from geopy import distance
+
+import folium
 import requests
 from dotenv import load_dotenv
+from geopy import distance
 
 
 def fetch_coordinates(apikey, address):
@@ -51,5 +53,8 @@ if __name__ == '__main__':
     cafe_list = []
     list_of_cafes()
     list_of_sorted_cafes = sorted(cafe_list, key=get_nearest_cafe)[:5]
-    for item in list_of_sorted_cafes:
-        print(item['title'])
+    map_coords = folium.Map(location=your_place_coords)
+    for cafes in list_of_sorted_cafes:
+        cafes_on_map = cafes['latitude'], cafes['longitude']
+        folium.Marker([*cafes_on_map], icon=folium.Icon(color='green')).add_to(map_coords)
+    map_coords.save('index.html')
