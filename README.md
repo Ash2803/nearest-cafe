@@ -6,10 +6,10 @@
 
 - Скачайте код
 - Установите зависимости из requirements.txt
-- получите API ключ в <a href="https://developer.tech.yandex.ru/" target="_blank">кабинете разработчика</a>
 ```
 pip install -r requirements.txt
 ```
+- получите API ключ в <a href="https://developer.tech.yandex.ru/" target="_blank">кабинете разработчика</a>
 - Создайте файл .env и поместите туда свой API-токен YANDEX_GEO_API_KEY=token
 - Запустите программу:
 ```
