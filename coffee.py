@@ -51,10 +51,12 @@ def hello_world():
 
 def show_cafes_on_map(your_place_coords, list_of_sorted_cafes):
     map_coords = folium.Map(location=your_place_coords)
+    tooltip = "Click me!"
     for cafes in list_of_sorted_cafes:
         cafe_names = cafes['title']
         cafes_on_map = cafes['latitude'], cafes['longitude']
-        folium.Marker([*cafes_on_map], popup=cafe_names, icon=folium.Icon(color='green')).add_to(map_coords)
+        folium.Marker(cafes_on_map, popup=cafe_names, tooltip=tooltip, icon=folium.Icon(color='green')).add_to(
+            map_coords)
     map_coords.save('index.html')
 
 
