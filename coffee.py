@@ -1,10 +1,10 @@
 import json
 import os
-from pprint import pprint
 
 import folium
 import requests
 from dotenv import load_dotenv
+from flask import Flask
 from geopy import distance
 
 
@@ -26,7 +26,7 @@ def fetch_coordinates(apikey, address):
     return lat, lon
 
 
-def list_of_cafes():
+def list_of_cafes(cafe_data, your_place_coords, cafe_list):
     for cafes in cafe_data:
         cafe_dict = dict()
         cafe_coords = cafes.get('Latitude_WGS84'), cafes.get('Longitude_WGS84')
@@ -42,7 +42,12 @@ def get_nearest_cafe(cafe):
     return cafe['dist']
 
 
-if __name__ == '__main__':
+def hello_world():
+    with open('index.html') as file:
+        return file.read()
+
+
+def main():
     load_dotenv()
     with open("coffee.json", "r", encoding='CP1251') as my_file:
         file_contents = my_file.read()
@@ -51,10 +56,18 @@ if __name__ == '__main__':
     your_place = input("Где вы находитесь? ")
     your_place_coords = fetch_coordinates(apikey, your_place)
     cafe_list = []
-    list_of_cafes()
+    list_of_cafes(cafe_data, your_place_coords, cafe_list)
     list_of_sorted_cafes = sorted(cafe_list, key=get_nearest_cafe)[:5]
     map_coords = folium.Map(location=your_place_coords)
     for cafes in list_of_sorted_cafes:
         cafes_on_map = cafes['latitude'], cafes['longitude']
         folium.Marker([*cafes_on_map], icon=folium.Icon(color='green')).add_to(map_coords)
     map_coords.save('index.html')
+    app = Flask(__name__)
+    app.add_url_rule('/', 'hello', hello_world)
+    app.run('0.0.0.0')
+
+
+if __name__ == '__main__':
+    main()
+
