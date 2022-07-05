@@ -47,6 +47,14 @@ def hello_world():
         return file.read()
 
 
+def show_cafes_on_map(your_place_coords, list_of_sorted_cafes):
+    map_coords = folium.Map(location=your_place_coords)
+    for cafes in list_of_sorted_cafes:
+        cafes_on_map = cafes['latitude'], cafes['longitude']
+        folium.Marker([*cafes_on_map], popup=cafes['title'], icon=folium.Icon(color='green')).add_to(map_coords)
+    map_coords.save('index.html')
+
+
 def main():
     load_dotenv()
     with open("coffee.json", "r", encoding='CP1251') as my_file:
@@ -58,11 +66,6 @@ def main():
     cafe_list = []
     list_of_cafes(cafe_data, your_place_coords, cafe_list)
     list_of_sorted_cafes = sorted(cafe_list, key=get_nearest_cafe)[:5]
-    map_coords = folium.Map(location=your_place_coords)
-    for cafes in list_of_sorted_cafes:
-        cafes_on_map = cafes['latitude'], cafes['longitude']
-        folium.Marker([*cafes_on_map], icon=folium.Icon(color='green')).add_to(map_coords)
-    map_coords.save('index.html')
     app = Flask(__name__)
     app.add_url_rule('/', 'hello', hello_world)
     app.run('0.0.0.0')
@@ -70,4 +73,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
