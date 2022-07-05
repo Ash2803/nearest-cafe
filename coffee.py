@@ -26,7 +26,8 @@ def fetch_coordinates(apikey, address):
     return lat, lon
 
 
-def list_of_cafes(cafe_data, your_place_coords, cafe_list):
+def make_list_of_cafes(cafe_data, your_place_coords):
+    cafe_list = []
     for cafes in cafe_data:
         cafe_dict = dict()
         cafe_coords = cafes.get('Latitude_WGS84'), cafes.get('Longitude_WGS84')
@@ -36,6 +37,7 @@ def list_of_cafes(cafe_data, your_place_coords, cafe_list):
         cafe_dict['latitude'] = cafes.get('Latitude_WGS84')
         cafe_dict['longitude'] = cafes.get('Longitude_WGS84')
         cafe_list.append(cafe_dict)
+    return cafe_list
 
 
 def get_nearest_cafe(cafe):
@@ -50,8 +52,9 @@ def hello_world():
 def show_cafes_on_map(your_place_coords, list_of_sorted_cafes):
     map_coords = folium.Map(location=your_place_coords)
     for cafes in list_of_sorted_cafes:
+        cafe_names = cafes['title']
         cafes_on_map = cafes['latitude'], cafes['longitude']
-        folium.Marker([*cafes_on_map], popup=cafes['title'], icon=folium.Icon(color='green')).add_to(map_coords)
+        folium.Marker([*cafes_on_map], popup=cafe_names, icon=folium.Icon(color='green')).add_to(map_coords)
     map_coords.save('index.html')
 
 
@@ -63,9 +66,8 @@ def main():
     apikey = os.getenv('YANDEX_GEO_API_KEY')
     your_place = input("Где вы находитесь? ")
     your_place_coords = fetch_coordinates(apikey, your_place)
-    cafe_list = []
-    list_of_cafes(cafe_data, your_place_coords, cafe_list)
-    list_of_sorted_cafes = sorted(cafe_list, key=get_nearest_cafe)[:5]
+    listed_cafe = make_list_of_cafes(cafe_data, your_place_coords)
+    list_of_sorted_cafes = sorted(listed_cafe, key=get_nearest_cafe)[:5]
     app = Flask(__name__)
     app.add_url_rule('/', 'hello', hello_world)
     app.run('0.0.0.0')
